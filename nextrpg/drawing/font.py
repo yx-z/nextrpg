@@ -1,6 +1,6 @@
+import os
 from dataclasses import dataclass, replace
 from functools import cached_property
-import os
 from pathlib import Path
 from typing import Self
 

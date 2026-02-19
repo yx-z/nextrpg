@@ -11,7 +11,7 @@ from nextrpg.drawing.sprite import Sprite
 from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.directional_offset import DirectionalOffset
-from nextrpg.geometry.size import Height, Size, Width, ZERO_HEIGHT
+from nextrpg.geometry.size import ZERO_HEIGHT, Height, Size, Width
 
 if TYPE_CHECKING:
     from nextrpg.drawing.text_group import TextGroup
@@ -46,8 +46,10 @@ class Text(Sprite):
             line_content_height = self.config.font.text_size(line).height
             line_height = line_content_height + self.config.line_spacing
             line_drawing = self._drawing(line) + cumulative_height
-            drawing_group = DrawingGroup(line_drawing)  
-            line_drawing_and_height = LineDrawingAndHeight(drawing_group, line_height) 
+            drawing_group = DrawingGroup(line_drawing)
+            line_drawing_and_height = LineDrawingAndHeight(
+                drawing_group, line_height
+            )
             res.append(line_drawing_and_height)
             cumulative_height += line_drawing_and_height.height
         return tuple(res)

@@ -1,14 +1,13 @@
 """
 Shared test utilities and mock objects for nextrpg tests.
 
-This module provides common stubs, mocks, and fixtures to avoid 
+This module provides common stubs, mocks, and fixtures to avoid
 initializing pygame surfaces and other heavy dependencies in tests.
 """
 
-from unittest.mock import MagicMock, Mock, patch
 from dataclasses import dataclass, field
 from typing import Any
-
+from unittest.mock import MagicMock, Mock, patch
 
 # ============================================================================
 # Mock pygame objects without initializing pygame display
@@ -18,11 +17,11 @@ from typing import Any
 def create_mock_surface(width: int = 100, height: int = 100) -> MagicMock:
     """
     Create a mock pygame Surface without initializing pygame.
-    
+
     Args:
         width: Width of the mock surface
         height: Height of the mock surface
-    
+
     Returns:
         A configured MagicMock representing a pygame Surface
     """
@@ -38,13 +37,15 @@ def create_mock_surface(width: int = 100, height: int = 100) -> MagicMock:
     return surface
 
 
-def create_mock_color(r: int = 255, g: int = 255, b: int = 255, a: int = 255) -> MagicMock:
+def create_mock_color(
+    r: int = 255, g: int = 255, b: int = 255, a: int = 255
+) -> MagicMock:
     """
     Create a mock pygame Color object.
-    
+
     Args:
         r, g, b, a: Color components (0-255)
-    
+
     Returns:
         A configured MagicMock representing a pygame Color
     """
@@ -56,14 +57,16 @@ def create_mock_color(r: int = 255, g: int = 255, b: int = 255, a: int = 255) ->
     return color
 
 
-def create_mock_rect(x: int = 0, y: int = 0, width: int = 100, height: int = 100) -> MagicMock:
+def create_mock_rect(
+    x: int = 0, y: int = 0, width: int = 100, height: int = 100
+) -> MagicMock:
     """
     Create a mock pygame Rect object.
-    
+
     Args:
         x, y: Position coordinates
         width, height: Dimensions
-    
+
     Returns:
         A configured MagicMock representing a pygame Rect
     """
@@ -86,11 +89,11 @@ def create_mock_rect(x: int = 0, y: int = 0, width: int = 100, height: int = 100
 def create_mock_font(name: str = "Arial", size: int = 12) -> MagicMock:
     """
     Create a mock pygame Font object.
-    
+
     Args:
         name: Font name
         size: Font size
-    
+
     Returns:
         A configured MagicMock representing a pygame Font
     """
@@ -110,6 +113,7 @@ def create_mock_font(name: str = "Arial", size: int = 12) -> MagicMock:
 @dataclass
 class MockAudioConfig:
     """Mock audio configuration."""
+
     volume: float = 1.0
     max_channels: int = 8
 
@@ -117,37 +121,41 @@ class MockAudioConfig:
 @dataclass
 class MockSystemConfig:
     """Mock system configuration."""
+
     background_thread_count: int = 4
 
 
 @dataclass
 class MockConfig:
     """Mock nextrpg configuration."""
+
     system: Any = field(default_factory=lambda: MagicMock())
-    
+
     def __post_init__(self):
-        if not hasattr(self.system, 'resource'):
+        if not hasattr(self.system, "resource"):
             resource_mock = MagicMock()
             resource_mock.background_thread_count = 4
             self.system.resource = resource_mock
-        if not hasattr(self.system, 'audio'):
+        if not hasattr(self.system, "audio"):
             self.system.audio = MockAudioConfig()
-        if not hasattr(self.system, 'sound'):
+        if not hasattr(self.system, "sound"):
             self.system.sound = MockAudioConfig()
 
 
 def mock_config() -> MockConfig:
     """
     Create a properly configured mock config object.
-    
+
     Returns:
         A MockConfig instance with sensible defaults
     """
-    return MockConfig(system=MagicMock(
-        resource=MagicMock(background_thread_count=4),
-        audio=MockAudioConfig(),
-        sound=MockAudioConfig()
-    ))
+    return MockConfig(
+        system=MagicMock(
+            resource=MagicMock(background_thread_count=4),
+            audio=MockAudioConfig(),
+            sound=MockAudioConfig(),
+        )
+    )
 
 
 # ============================================================================
@@ -157,27 +165,27 @@ def mock_config() -> MockConfig:
 
 class MockTimer:
     """Simple mock timer for testing time-based logic."""
-    
+
     def __init__(self, duration: int = 1000):
         self.duration = duration
         self.elapsed = 0
-    
-    def tick(self, delta: int) -> 'MockTimer':
+
+    def tick(self, delta: int) -> "MockTimer":
         """Advance time by delta milliseconds."""
         new_timer = MockTimer(self.duration)
         new_timer.elapsed = self.elapsed + delta
         return new_timer
-    
+
     @property
     def is_complete(self) -> bool:
         """Check if timer has completed."""
         return self.elapsed >= self.duration
-    
+
     @property
     def remaining(self) -> int:
         """Get remaining time."""
         return max(0, self.duration - self.elapsed)
-    
+
     @property
     def completed_percentage(self) -> float:
         """Get completion as percentage (0.0-1.0)."""
@@ -192,15 +200,16 @@ class MockTimer:
 @dataclass
 class MockCoordinate:
     """Mock coordinate for testing."""
+
     x: float = 0.0
     y: float = 0.0
-    
-    def __add__(self, other: 'MockCoordinate') -> 'MockCoordinate':
+
+    def __add__(self, other: "MockCoordinate") -> "MockCoordinate":
         if isinstance(other, MockCoordinate):
             return MockCoordinate(self.x + other.x, self.y + other.y)
         return NotImplemented
-    
-    def __sub__(self, other: 'MockCoordinate') -> 'MockCoordinate':
+
+    def __sub__(self, other: "MockCoordinate") -> "MockCoordinate":
         if isinstance(other, MockCoordinate):
             return MockCoordinate(self.x - other.x, self.y - other.y)
         return NotImplemented
@@ -209,6 +218,7 @@ class MockCoordinate:
 @dataclass
 class MockSize:
     """Mock size for testing."""
+
     width: float = 100.0
     height: float = 100.0
 
@@ -216,12 +226,13 @@ class MockSize:
 @dataclass
 class MockDimension:
     """Mock dimension for testing."""
+
     value: float = 100.0
-    
-    def __mul__(self, other: float) -> 'MockDimension':
+
+    def __mul__(self, other: float) -> "MockDimension":
         return MockDimension(self.value * other)
-    
-    def __truediv__(self, other: float) -> 'MockDimension':
+
+    def __truediv__(self, other: float) -> "MockDimension":
         return MockDimension(self.value / other)
 
 
@@ -232,13 +243,13 @@ class MockDimension:
 
 class MockSprite:
     """Mock sprite for testing animation."""
-    
+
     def __init__(self, width: int = 100, height: int = 100):
         self.surface = create_mock_surface(width, height)
         self.width = width
         self.height = height
         self.is_complete = False
-    
+
     @property
     def pygame(self):
         """Return mock pygame surface."""
@@ -247,7 +258,7 @@ class MockSprite:
 
 class MockAnimationSpec:
     """Mock animation specification."""
-    
+
     def __init__(self, duration: int = 1000):
         self.duration = duration
 
@@ -259,7 +270,7 @@ class MockAnimationSpec:
 
 class MockSoundSpec:
     """Mock sound specification."""
-    
+
     def __init__(self, path: str = "mock.wav", loop: bool = False):
         self.path = path
         self.loop = loop
@@ -268,7 +279,7 @@ class MockSoundSpec:
 
 class MockMusicSpec:
     """Mock music specification."""
-    
+
     def __init__(self, path: str = "mock.ogg"):
         self.path = path
 
@@ -280,7 +291,7 @@ class MockMusicSpec:
 
 class MockCharacterSpec:
     """Mock character specification."""
-    
+
     def __init__(self, name: str = "TestChar"):
         self.name = name
         self.x = 0
@@ -289,14 +300,14 @@ class MockCharacterSpec:
 
 class MockPlayerSpec:
     """Mock player specification."""
-    
+
     def __init__(self, name: str = "Player"):
         self.name = name
 
 
 class MockNPCSpec:
     """Mock NPC specification."""
-    
+
     def __init__(self, name: str = "NPC"):
         self.name = name
 
@@ -308,7 +319,7 @@ class MockNPCSpec:
 
 class MockItemSpec:
     """Mock item specification."""
-    
+
     def __init__(self, name: str = "Item", value: int = 1):
         self.name = name
         self.value = value
@@ -322,34 +333,34 @@ class MockItemSpec:
 def patch_pygame_surface():
     """
     Decorator/context manager to mock pygame.Surface initialization.
-    
+
     Usage:
         @patch_pygame_surface()
         def test_something():
             ...
     """
-    return patch('pygame.Surface', side_effect=create_mock_surface)
+    return patch("pygame.Surface", side_effect=create_mock_surface)
 
 
 def patch_config():
     """
     Decorator/context manager to mock nextrpg.config.config.config.
-    
+
     Usage:
         @patch_config()
         def test_something():
             ...
     """
-    return patch('nextrpg.config.config.config', return_value=mock_config())
+    return patch("nextrpg.config.config.config", return_value=mock_config())
 
 
 def patch_get_timepoint():
     """
     Decorator/context manager to mock pygame.time.get_ticks.
-    
+
     Usage:
         @patch_get_timepoint()
         def test_something():
             ...
     """
-    return patch('pygame.time.get_ticks', return_value=0)
+    return patch("pygame.time.get_ticks", return_value=0)
