@@ -55,6 +55,8 @@ class ItemConfig:
     )
 
     def with_item(self, item: Item | tuple[Item, ...]) -> Self:
+        from nextrpg.item.item import Item
+
         if isinstance(item, Item):
             items = self.items + (item,)
         else:
