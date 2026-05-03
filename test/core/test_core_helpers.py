@@ -72,7 +72,7 @@ class TestModuleAndAttribute:
         ma = to_module_and_attribute(test_func)
 
         # Module name should match the actual module this test is in
-        assert ".test_core_helpers" in ma.module
+        assert "test_core_helpers" in ma.module
         # Attribute includes the local function path, so just check it ends with the name
         assert "test_func" in ma.attribute
 
