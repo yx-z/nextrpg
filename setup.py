@@ -6,7 +6,7 @@ setup(
     name="nextrpg",
     version="0.1.31",
     package=find_packages(),
-    install_requires=["pygame-ce", "pytmx"],
+    install_requires=["pygame-ce", "pytmx", "cachetools", "frozendict"],
     author="yx-z",
     author_email="yx-z@outlook.com",
     description="Build your next RPG (Role Playing Game).",

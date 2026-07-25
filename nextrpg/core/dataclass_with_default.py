@@ -63,7 +63,17 @@ def dataclass_with_default[T](
             orig_post_init(self)
 
     def getattribute(self, name: str) -> Any:
-        if isinstance(value := object.__getattribute__(self, name), _Default):
+        # Safety net for default fields that reference another not-yet-resolved
+        # default field during __post_init__ (e.g. an earlier field whose lambda
+        # reads a later field before that later field's own resolution). After
+        # __post_init__ completes, every field has been resolved to a real
+        # value, so this check is False on the vast majority of
+        # post-construction accesses — it exists for the construction window,
+        # not the hot path. `type(...) is _Default` is used instead of isinstance
+        # because _Default is never subclassed (default() is its only
+        # constructor), making it a cheaper pointer comparison with identical
+        # semantics.
+        if type(value := object.__getattribute__(self, name)) is _Default:
             res = value(self)
             object.__setattr__(self, name, res)
             return res

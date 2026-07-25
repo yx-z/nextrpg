@@ -10,6 +10,11 @@ Build your next RPG (Role Playing Game).
 pip install nextrpg
 ```
 
+> Requires Python 3.14+, which provides PEP 750 template strings (t-strings) —
+> the foundation of nextrpg's logging and debug-overlay system. `core/logger.py`
+> consumes `string.templatelib.Template` directly and uses `Template.strings` as
+> a dedup key for timed log entries; callsites use `t"..."`.
+
 ## Example
 
 Bring up Tiled map editor...

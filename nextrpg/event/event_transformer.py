@@ -13,6 +13,17 @@ if TYPE_CHECKING:
 logger = logging.getLogger("event_transformer")
 
 
+class EventTransformError(RuntimeError):
+    """Raised when an event function cannot be source-transformed.
+
+    The dialogue DSL (@cutscene / registered RPG events) works by reading the
+    function's Python source and rewriting its AST. This requires a function
+    defined in a .py file with accessible source. Common causes of failure:
+    lambdas, functions defined in a REPL / via eval / exec, decorators that
+    hide the original function, or source-less (frozen) deployments.
+    """
+
+
 def transform_event[**P](
     fun: Callable[P, None], name_override: str | None = None
 ) -> Callable[P, Generator[EventScene, Any, None]]:
@@ -23,8 +34,20 @@ def transform_event[**P](
         function = fun.__call__
         name = "__call__"
 
-    src = dedent(getsource(function))
-    tree = parse(src)
+    try:
+        src = dedent(getsource(function))
+        tree = parse(src)
+    except (OSError, TypeError, ValueError) as e:
+        raise EventTransformError(
+            f"Cannot read source for {fun!r} to apply the nextrpg event "
+            f"transformer. The dialogue DSL requires a function defined in a "
+            f".py file with accessible source; lambdas, REPL/eval-defined "
+            f"functions, or source-less deployments are not supported. "
+            f"Either define the event as a normal function, or use the "
+            f"explicit non-macro form (call say()/yield directly). "
+            f"Original error: {e}"
+        ) from e
+
     for transformer in config().event.event_transformer.transformers:
         tree = transformer.visit(tree)
     tree = fix_missing_locations(tree)

@@ -224,6 +224,27 @@ class TestDataclassWithDefault:
         assert calc.sum_val == 7
         assert calc.product == 12
 
+    def test_dataclass_with_default_forward_reference(self):
+        """A default may reference a later default field declared below it.
+
+        ``__getattribute__`` resolves the not-yet-resolved later field on first
+        access during ``__post_init__``. This guards that safety-net behavior
+        (without it, ``self.b`` would return the raw ``_Default`` descriptor and
+        ``self.b + 1`` would raise ``TypeError``).
+        """
+        from dataclasses import KW_ONLY
+
+        @dataclass_with_default(frozen=True)
+        class ForwardRef:
+            _: KW_ONLY = private_init_below()
+            # 'a' is declared before 'b' but reads self.b in its default.
+            a: int = default(lambda self: self.b + 1)
+            b: int = default(lambda self: 10)
+
+        obj = ForwardRef()
+        assert obj.b == 10
+        assert obj.a == 11
+
     def test_dataclass_with_default_decorator_without_args(self):
         """Test decorator applied without arguments."""
 

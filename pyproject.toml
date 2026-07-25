@@ -3,10 +3,18 @@ name = "nextrpg"
 version = "0.1.31"
 description = "Build your next RPG (Role Playing Game)."
 authors = [{ name = "yx-z", email = "yx-z@outlook.com" }]
+# Python 3.14 is load-bearing: the library uses PEP 750 template strings
+# (t-strings) as the backbone of its logging/debug-overlay system. core/logger.py
+# defines a Logger whose debug/info/error accept string.templatelib.Template,
+# renders them via join+format (str(Template) is a repr, not rendered text), and
+# uses Template.strings as a stable dedup key for timed log entries; callsites
+# use t"..." (e.g. character/moving_character_on_screen.py). t-strings cannot be
+# polyfilled below 3.14. PEP 649 deferred annotations are also relied upon
+# (e.g. core/time.py forward-references Countdown below its use site).
 requires-python = ">=3.14"
 readme = "README.md"
 
-dependencies = ["pygame-ce", "pytmx"]
+dependencies = ["pygame-ce", "pytmx", "cachetools", "frozendict"]
 
 [tool.black]
 line-length = 80

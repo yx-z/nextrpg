@@ -29,7 +29,7 @@ class TopRightCoordinate(Coordinate):
         return self.as_top_right_of(size)
 
 
-class CenterLeftCoodinate(Coordinate):
+class CenterLeftCoordinate(Coordinate):
     @override
     def as_top_left_of(self, size: Size | Sizable) -> CenterLeftSizable:
         return self.as_center_left_of(size)

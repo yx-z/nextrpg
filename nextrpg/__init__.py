@@ -314,3 +314,18 @@ from nextrpg.widget.widget_interaction_result import (
 )
 from nextrpg.widget.widget_loader import WidgetLoader
 from nextrpg.widget.widget_spec import WidgetSpec
+
+# Auto-derive the public API surface from the explicit imports above, so it
+# cannot drift from what is actually re-exported. Subpackages that Python
+# attaches to the package object as a side effect of importing submodules are
+# excluded: the public API is symbols (classes, functions, constants), not
+# submodules. This keeps `from nextrpg import *` and IDE introspection in sync
+# with the hand-maintained import list without a second list to maintain.
+from types import ModuleType as _ModuleType
+
+__all__ = [
+    name
+    for name in dir()
+    if not name.startswith("_")
+    and not isinstance(globals()[name], _ModuleType)
+]

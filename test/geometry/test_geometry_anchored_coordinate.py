@@ -7,7 +7,7 @@ from nextrpg.geometry.anchored_coordinate import (
     BottomLeftCoordinate,
     BottomRightCoordinate,
     CenterCoordinate,
-    CenterLeftCoodinate,
+    CenterLeftCoordinate,
     CenterRightCoordinate,
     TopCenterCoordinate,
     TopRightCoordinate,
@@ -58,13 +58,13 @@ class TestCenterLeftCoordinate:
 
     def test_center_left_coordinate_creation(self):
         """Test creating a CenterLeftCoordinate."""
-        coord = CenterLeftCoodinate(50, 100)
+        coord = CenterLeftCoordinate(50, 100)
         assert coord.left_value == 50
         assert coord.top_value == 100
 
     def test_center_left_as_top_left_of_size(self):
         """Test as_top_left_of delegates to as_center_left_of."""
-        coord = CenterLeftCoodinate(50, 100)
+        coord = CenterLeftCoordinate(50, 100)
         size = Size(Width(30), Height(40))
 
         result = coord.as_top_left_of(size)
@@ -169,7 +169,7 @@ class TestAnchoredCoordinatesAreCoordinates:
         coords = [
             TopCenterCoordinate(0, 0),
             TopRightCoordinate(0, 0),
-            CenterLeftCoodinate(0, 0),
+            CenterLeftCoordinate(0, 0),
             CenterCoordinate(0, 0),
             CenterRightCoordinate(0, 0),
             BottomLeftCoordinate(0, 0),

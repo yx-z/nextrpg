@@ -7,7 +7,7 @@ from nextrpg.geometry.anchored_coordinate import (
     BottomLeftCoordinate,
     BottomRightCoordinate,
     CenterCoordinate,
-    CenterLeftCoodinate,
+    CenterLeftCoordinate,
     CenterRightCoordinate,
     TopCenterCoordinate,
     TopRightCoordinate,
@@ -87,9 +87,9 @@ class Sizable(Protocol):
         )
 
     @cached_property
-    def center_left(self) -> CenterLeftCoodinate:
+    def center_left(self) -> CenterLeftCoordinate:
         left, top = self.top_left
-        return CenterLeftCoodinate(left, top + self.height.value / 2)
+        return CenterLeftCoordinate(left, top + self.height.value / 2)
 
     @cached_property
     def center_right(self) -> CenterRightCoordinate:

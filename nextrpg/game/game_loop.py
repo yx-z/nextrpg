@@ -59,6 +59,12 @@ class GameLoop:
         logger.debug(f"FPS: {type_name(self._scene)} {fps}", duration=None)
         ticked_window = loop._window.tick(fps)
         time_delta = loop._clock.tick(loop._config.max_frames_per_second)
+        # Intentional: render the current scene *before* ticking it for the
+        # next frame. This decouples rendering from simulation and yields one
+        # frame of input latency (input applied this frame shows next frame),
+        # which is imperceptible for a tile-based RPG but keeps the render and
+        # update passes independent. The scene returned by tick() is what gets
+        # rendered on the following call to `tick`.
         loop._window.blits(loop._scene.drawing_on_screens, time_delta)
 
         ticked_scene, state = loop._scene.tick(time_delta, state)
