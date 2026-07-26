@@ -30,6 +30,17 @@ _last_scene: Scene | None = None
 
 
 def last_scene() -> Scene:
+    """Return the scene that was most recently rendered by the game loop.
+
+    This is a process-global, set as a side effect of ``GameLoop.tick`` (it
+    captures the scene just rendered, before the tick produces the next one).
+    It is load-bearing, not merely a debug hook: ``TransitionScene.from_scene``
+    defaults to ``last_scene`` so that a transition can implicitly target the
+    currently-running scene without the caller threading it in. For a
+    single-game engine this is a defensible piece of global state; removing it
+    would force every ``TransitionScene`` construction to pass ``from_scene``
+    explicitly (an ergonomic regression across user code).
+    """
     assert _last_scene, "Cannot call `last_scene` before `GameLoop.tick`."
     return _last_scene
 
@@ -76,6 +87,13 @@ class GameLoop:
             _window=ticked_window,
             _event_queue=event_queue,
         )
+        # Note on cached_property + replace(): replace() builds a fresh frozen
+        # instance, and @cached_property caches live in the instance __dict__,
+        # so the new instance's caches recompute on first access (they do not
+        # survive replace). This is inherent — caches cannot be safely copied
+        # across a replace without knowing which field changes invalidate which
+        # cache, which is not expressible today. For hot per-frame values,
+        # compute them here in tick() rather than behind @cached_property.
 
         global _last_scene
         _last_scene = self._scene

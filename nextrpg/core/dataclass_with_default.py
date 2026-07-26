@@ -73,6 +73,15 @@ def dataclass_with_default[T](
         # because _Default is never subclassed (default() is its only
         # constructor), making it a cheaper pointer comparison with identical
         # semantics.
+        #
+        # A flag-based fast-path (set a `_resolved` flag in __post_init__ and
+        # short-circuit here) is NOT used: it is a measured pessimization
+        # (~318ns vs ~227ns per access) because checking the flag requires a
+        # second object.__getattribute__ call, which costs more than the
+        # type() is check it would skip. The override itself cannot be removed
+        # post-construction (it's a class-level method), and the on-demand
+        # resolution it provides is required for forward-referencing defaults
+        # that no static declaration-order pass can resolve in general.
         if type(value := object.__getattribute__(self, name)) is _Default:
             res = value(self)
             object.__setattr__(self, name, res)

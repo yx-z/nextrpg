@@ -225,6 +225,16 @@ class Coordinate(NamedTuple):
         return BottomRightSizable(sizable, self)
 
     def as_anchor_of(self, sizable: Sizable | Size, anchor: Anchor) -> Sizable:
+        """Anchor ``sizable`` at ``self`` for a runtime-chosen ``Anchor``.
+
+        This is the programmatic dispatcher over the nine ``as_*_of`` methods
+        below it. Those specific methods are the primary API (used ~100x across
+        the codebase) because each returns a distinct anchored-proxy type
+        (TopLeftSizable, CenterSizable, ...) giving mypy-narrowed results;
+        this generic form returns the base ``Sizable`` and is for cases where
+        the anchor is not known until runtime. The specific methods are not
+        redundancy to remove — they carry type information this loses.
+        """
         match anchor:
             case Anchor.TOP_LEFT:
                 return self.as_top_left_of(sizable)

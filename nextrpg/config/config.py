@@ -32,6 +32,20 @@ _initial_config: Config | None = None
 _config: Config | None = None
 _latest_debug_config: DebugConfig | None = None
 
+# Config is a process-global singleton. This is a deliberate tradeoff for a
+# single-game engine: it lets any object read settings (text size, durations,
+# key mappings, ...) without threading Config through every constructor, which
+# would be an ergonomic regression across ~60 callsites / 45 modules.
+#
+# The single runtime mutation is the debug toggle (GameLoop._toggle_debug via
+# set_config). Staleness risk for cached_property readers of config().debug is
+# bounded to one frame by the per-tick functional-update model: scene objects
+# are rebuilt via replace() each tick, so their (stale) caches die with them.
+# Long-lived flyweights (Drawing) read config().debug through a plain @property
+# (not cached), so they reflect toggle changes immediately.
+#
+# For tests, use override_config() to mutate safely and restore on exit.
+
 
 def set_config(cfg: Config) -> Config:
     global _initial_config
@@ -56,6 +70,7 @@ def force_debug_config() -> DebugConfig:
 
 
 def config() -> Config:
+    """Return the active global Config (lazily initializing the default)."""
     if _config:
         return _config
     cfg = Config()
