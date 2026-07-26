@@ -1,13 +1,10 @@
-"""Tests for nextrpg.event.event_transformer error handling.
+"""Tests for nextrpg.event.event_transformer.
 
-The dialogue DSL rewrites function source via getsource/parse/exec. When source
-is unavailable (REPL/eval/exec-defined, or source-less deployments) it must
-raise a clear, actionable EventTransformError rather than an opaque
-OSError/TypeError.
-
-Note: a lambda defined in a .py file still has retrievable source, so to exercise
-the source-less path we compile a function against a fake filename that
-inspect.getsource cannot resolve.
+Covers both the error path (source-less functions) and the happy path
+(real functions with accessible source). The happy path exercises the
+full transform pipeline: getsource → parse → AST transform → compile →
+exec → return, which is the success branch of the try/except added for
+robustness.
 """
 
 import pytest
@@ -16,6 +13,33 @@ from nextrpg.event.event_transformer import (
     EventTransformError,
     transform_event,
 )
+
+# ---------------------------------------------------------------------------
+# Module-level functions / classes with real source for the happy-path tests.
+# inspect.getsource requires the definition to live in a .py file, so these
+# cannot be lambdas or exec-defined.
+# ---------------------------------------------------------------------------
+
+
+def _simple_event():
+    result = 1 + 2
+    return result
+
+
+class _SimpleCallable:
+    """Callable class instance — exercises the non-function branch."""
+
+    def __call__(self):
+        return 42
+
+
+def _event_with_closure():
+    captured = 99
+
+    def inner():
+        return captured
+
+    return inner
 
 
 def _make_sourceless_function():
@@ -46,3 +70,48 @@ def test_transform_event_error_references_offending_function():
         transform_event(fun)
     # The offending callable should be referenced in the message.
     assert "<function f" in str(exc_info.value)
+
+
+# ---------------------------------------------------------------------------
+# Happy-path tests — exercise the full transform pipeline (lines 38-68).
+# ---------------------------------------------------------------------------
+
+
+def test_transform_event_success_returns_callable():
+    """A normal function with accessible source is successfully transformed.
+
+    This covers the success branch of the try/except: getsource + parse
+    succeed, then the AST is transformed, compiled, and exec'd.
+    """
+    transformed = transform_event(_simple_event)
+    assert callable(transformed)
+    assert transformed() == 3
+
+
+def test_transform_event_preserves_function_name():
+    """The transformed function keeps the original name in the namespace."""
+    transformed = transform_event(_simple_event)
+    assert transformed.__name__ == "_simple_event"
+
+
+def test_transform_event_callable_instance():
+    """A callable class instance exercises the non-function branch.
+
+    When ``fun`` is not a function (e.g. an instance with ``__call__``),
+    the transformer reads the source of ``fun.__call__`` and returns a
+    lambda that threads ``fun`` as the first argument (self).
+    """
+    obj = _SimpleCallable()
+    transformed = transform_event(obj)
+    assert callable(transformed)
+    assert transformed() == 42
+
+
+def test_transform_event_callable_instance_threads_self():
+    """The returned lambda passes the original instance as ``self``."""
+    obj = _SimpleCallable()
+    transformed = transform_event(obj)
+    # The lambda signature is (*args, **kwargs) → transformed(fun, *args, **kwargs)
+    # Calling with no args passes fun as self.
+    result = transformed()
+    assert result == 42

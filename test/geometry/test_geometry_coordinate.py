@@ -97,6 +97,29 @@ class TestYAxis:
         assert isinstance(result, YAxis)
         assert result.value == 80
 
+    def test_yaxis_subtraction_with_pixel(self):
+        """Test YAxis subtraction with raw pixel value (Pixel branch)."""
+        axis = YAxis(50)
+        result = axis - 30
+        assert isinstance(result, YAxis)
+        assert result.value == 20
+
+    def test_yaxis_subtraction_with_yaxis(self):
+        """Test YAxis subtraction with another YAxis returns Height."""
+        from nextrpg.geometry.size import Height
+
+        result = YAxis(50) - YAxis(20)
+        assert isinstance(result, Height)
+        assert result.value == 30
+
+    def test_yaxis_subtraction_with_height(self):
+        """Test YAxis subtraction with Height returns YAxis."""
+        from nextrpg.geometry.size import Height
+
+        result = YAxis(50) - Height(20)
+        assert isinstance(result, YAxis)
+        assert result.value == 30
+
     def test_yaxis_matmul_with_xaxis(self):
         """Test YAxis @ XAxis creates Coordinate."""
         x = XAxis(100)

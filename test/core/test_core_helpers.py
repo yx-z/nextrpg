@@ -280,6 +280,56 @@ class TestDataclassWithDefault:
         with pytest.raises(Exception):  # FrozenInstanceError
             obj.name = "changed"
 
+    def test_dataclass_with_default_preserves_user_post_init(self):
+        """A user-defined __post_init__ is preserved and called after defaults.
+
+        The decorator captures any existing ``__post_init__`` and calls it
+        *after* resolving default fields. This covers the ``orig_post_init``
+        branch in the generated ``post_init``.
+        """
+        from dataclasses import KW_ONLY, field
+
+        call_log: list[str] = []
+
+        @dataclass_with_default
+        class WithPostInit:
+            _: KW_ONLY = private_init_below()
+            base: int = 10
+            doubled: int = default(lambda self: self.base * 2)
+            log: list = field(default_factory=list)
+
+            def __post_init__(self):
+                # At this point defaults are already resolved.
+                self.log.append(self.doubled)
+                call_log.append("called")
+
+        obj = WithPostInit()
+        assert call_log == ["called"]
+        assert obj.log == [20]
+        assert obj.doubled == 20
+
+    def test_dataclass_with_default_post_init_sees_resolved_defaults(self):
+        """User __post_init__ sees resolved values, not _Default descriptors."""
+        from dataclasses import KW_ONLY
+
+        seen: dict = {}
+
+        @dataclass_with_default(frozen=True)
+        class CheckResolved:
+            _: KW_ONLY = private_init_below()
+            x: int = 5
+            y: int = default(lambda self: self.x + 1)
+
+            def __post_init__(self):
+                # frozen dataclass can't setattr, but can read.
+                # Use object.__setattr__ to record via a side channel.
+                seen["y"] = self.y
+
+        obj = CheckResolved()
+        # __post_init__ saw the resolved value, not the _Default descriptor.
+        assert seen["y"] == 6
+        assert obj.y == 6
+
 
 class TestPrivateInitIntegration:
     """Integration tests for private_init_below in dataclasses."""
