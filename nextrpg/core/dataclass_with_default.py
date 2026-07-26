@@ -55,33 +55,26 @@ def dataclass_with_default[T](
     orig_post_init = getattr(cls, "__post_init__", None)
 
     def post_init(self, *args: Any, **kwargs: Any) -> None:
+        # Eagerly resolve every default field by triggering __getattribute__,
+        # which resolves any _Default value on access. This materializes
+        # forward-referencing defaults before the user's __post_init__ runs.
         for f in fields(self):
-            if isinstance(attr := getattr(self, f.name, None), _Default):
-                value = attr(self)
-                object.__setattr__(self, f.name, value)
+            getattr(self, f.name, None)
         if orig_post_init:
             orig_post_init(self)
 
     def getattribute(self, name: str) -> Any:
-        # Safety net for default fields that reference another not-yet-resolved
-        # default field during __post_init__ (e.g. an earlier field whose lambda
-        # reads a later field before that later field's own resolution). After
-        # __post_init__ completes, every field has been resolved to a real
-        # value, so this check is False on the vast majority of
-        # post-construction accesses — it exists for the construction window,
-        # not the hot path. `type(...) is _Default` is used instead of isinstance
-        # because _Default is never subclassed (default() is its only
-        # constructor), making it a cheaper pointer comparison with identical
-        # semantics.
+        # Resolve _Default fields on access. Needed during construction when
+        # a default lambda reads a sibling field not yet eagerly resolved by
+        # post_init (forward references). After construction, every field is
+        # resolved and this is a cheap pointer check that returns False.
         #
-        # A flag-based fast-path (set a `_resolved` flag in __post_init__ and
-        # short-circuit here) is NOT used: it is a measured pessimization
-        # (~318ns vs ~227ns per access) because checking the flag requires a
-        # second object.__getattribute__ call, which costs more than the
-        # type() is check it would skip. The override itself cannot be removed
-        # post-construction (it's a class-level method), and the on-demand
-        # resolution it provides is required for forward-referencing defaults
-        # that no static declaration-order pass can resolve in general.
+        # type() is _Default (not isinstance): _Default is never subclassed,
+        # so pointer comparison is equivalent and cheaper.
+        #
+        # No flag-based fast-path: measured pessimization (~318ns vs ~227ns)
+        # — the extra object.__getattribute__ for the flag costs more than
+        # the type() check it would skip.
         if type(value := object.__getattribute__(self, name)) is _Default:
             res = value(self)
             object.__setattr__(self, name, res)

@@ -254,6 +254,8 @@ class Coordinate(NamedTuple):
                 return self.as_bottom_center_of(sizable)
             case Anchor.BOTTOM_RIGHT:
                 return self.as_bottom_right_of(sizable)
+            case _:
+                raise ValueError(f"Unknown anchor: {anchor}")
 
     @property
     def save_data(self) -> Self:

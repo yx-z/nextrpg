@@ -316,3 +316,16 @@ class TestOrigin:
         """Test ORIGIN is at (0, 0)."""
         assert ORIGIN.left_value == 0
         assert ORIGIN.top_value == 0
+
+
+class TestAsAnchorOf:
+    """Tests for Coordinate.as_anchor_of dispatch."""
+
+    def test_as_anchor_of_invalid_anchor_raises(self):
+        """Passing a non-Anchor value raises ValueError from case _."""
+        from nextrpg.geometry.size import Size
+
+        coord = Coordinate(100, 100)
+        size = Size(200, 200)
+        with pytest.raises(ValueError, match="Unknown anchor"):
+            coord.as_anchor_of(size, "not_an_anchor")

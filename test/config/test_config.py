@@ -47,3 +47,34 @@ def test_force_debug_config():
     # Clean up (revert to original)
     set_config(original_config)
     config_module._latest_debug_config = original_latest
+
+
+def test_force_debug_config_returns_cached():
+    """When _latest_debug_config is already set, force_debug_config returns it directly (line 64)."""
+    from nextrpg.config import config as config_module
+
+    original_latest = config_module._latest_debug_config
+    try:
+        cached = DebugConfig()
+        config_module._latest_debug_config = cached
+        result = force_debug_config()
+        assert result is cached
+    finally:
+        config_module._latest_debug_config = original_latest
+
+
+def test_initial_config_creates_when_none():
+    """When _initial_config is None, initial_config creates and sets it (lines 83-84)."""
+    from nextrpg.config import config as config_module
+
+    original_initial = config_module._initial_config
+    original_config = config_module._config
+    try:
+        config_module._initial_config = None
+        config_module._config = None
+        result = initial_config()
+        assert isinstance(result, Config)
+        assert config_module._initial_config is result
+    finally:
+        config_module._initial_config = original_initial
+        config_module._config = original_config

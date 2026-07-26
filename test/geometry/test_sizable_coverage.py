@@ -55,3 +55,10 @@ def test_sizable_all_properties():
     area = s.rectangle_area_on_screen
     assert area.top_left == s.top_left
     assert area.size == s.size
+
+
+def test_at_anchor_unknown_anchor_raises():
+    """Passing a non-Anchor value raises ValueError from the defensive case _."""
+    s = RealSizable(Coordinate(10, 20), Size(100, 200))
+    with pytest.raises(ValueError, match="Unknown anchor"):
+        s.at_anchor("not_an_anchor")

@@ -117,12 +117,8 @@ class Window:
         self._screen.fill(self.current_config.background.pygame)
 
         # Reuse the offscreen base surface across frames instead of allocating
-        # a fresh Surface + convert_alpha() every tick. Its size is keyed on
-        # initial_config.size, which is stable across window resizes (only
-        # current_config.size changes on resize), so the cached surface stays
-        # valid for the life of the Window. Window.tick returns self in steady
-        # state (only replace()s on resize), so this cached_property persists
-        # across frames. Clear to transparent each frame before drawing.
+        # a fresh Surface each tick. Keyed on initial_config.size (stable across
+        # resizes), and persists because tick() returns self in steady state.
         base = self._base_surface
         base.fill((0, 0, 0, 0))
         base.blits(d.pygame for d in drawing_on_screens)

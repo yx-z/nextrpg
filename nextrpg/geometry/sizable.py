@@ -125,3 +125,5 @@ class Sizable(Protocol):
                 return self.bottom_center
             case Anchor.BOTTOM_RIGHT:
                 return self.bottom_right
+            case _:
+                raise ValueError(f"Unknown anchor: {anchor}")
